@@ -1,0 +1,62 @@
+name: Daily Puzzle Update & Indexing
+
+on:
+  schedule:
+    # Runs at 05:05 UTC every day (1:05 AM ET / 12:05 AM CT) right after NYT releases new puzzle
+    - cron: '5 5 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  update-daily-hints:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Generate Today's Hints & Archive
+        run: |
+          python3 generate_connections.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add connections-hints-today/ connections-hints/ connections-hints.html sitemap.xml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update daily NYT Connections hints and sitemap [skip ci]" && git push)
+
+      - name: Ping IndexNow
+        run: |
+          python3 -c '
+          import urllib.request, json
+          payload = {
+              "host": "wordunscramblerhub.com",
+              "key": "8f4b23c91d8a47e290f6b5a3c1e2d4b5",
+              "keyLocation": "https://wordunscramblerhub.com/8f4b23c91d8a47e290f6b5a3c1e2d4b5.txt",
+              "urlList": [
+                  "https://wordunscramblerhub.com/",
+                  "https://wordunscramblerhub.com/connections-hints-today/",
+                  "https://wordunscramblerhub.com/connections-hints.html"
+              ]
+          }
+          data = json.dumps(payload).encode()
+          for ep in ["https://api.indexnow.org/indexnow", "https://www.bing.com/indexnow", "https://yandex.com/indexnow"]:
+              try:
+                  req = urllib.request.Request(ep, data=data, headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
+                  with urllib.request.urlopen(req, timeout=10) as r:
+                      print(f"Pushed to {ep}: {r.status}")
+              except Exception as e:
+                  print(f"Error pinging {ep}: {e}")
+          '
