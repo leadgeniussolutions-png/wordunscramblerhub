@@ -8,3 +8,5 @@ dfs_response.json
 keyword_suggestions_raw.json
 keyword_categories.json
 keyword_analysis_processed.json
+.wrangler/
+
