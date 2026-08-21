@@ -1,0 +1,10 @@
+.DS_Store
+google-cloud-cli-darwin-arm.tar.gz
+google-cloud-sdk/
+__pycache__/
+*.pyc
+.venv/
+dfs_response.json
+keyword_suggestions_raw.json
+keyword_categories.json
+keyword_analysis_processed.json

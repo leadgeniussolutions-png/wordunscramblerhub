@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Word Unscrambler — Find Words From Letters</title>
+  <meta name="description" content="Unscramble letters into valid words instantly. Use wildcards, filter by length, and sort results by Scrabble or Words With Friends score.">
+  <link rel="canonical" href="https://wordunscramblerhub.com/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:title" content="Word Unscrambler — Find Words From Letters">
+  <meta property="og:description" content="A fast, free word unscrambler with wildcard and scoring support.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://wordunscramblerhub.com/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebApplication","@id":"https://wordunscramblerhub.com/#app","name":"Word Unscrambler Hub","url":"https://wordunscramblerhub.com/","applicationCategory":"GameApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},
+      {"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"How do I unscramble letters?","acceptedAnswer":{"@type":"Answer","text":"Enter the letters from your rack and select Find words. The solver compares your letters with its English word list, then groups matching words by length and displays their game scores."}},
+        {"@type":"Question","name":"Can I use blank tiles or wildcards?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enter a question mark or asterisk for each blank tile. A wildcard can stand for any one letter and contributes zero points when the solver calculates a word score."}},
+        {"@type":"Question","name":"Can I filter unscrambled words?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can require a starting letter, ending letter, contained letter sequence, or exact word length. Filters are applied before the final results are scored and sorted."}}
+      ]},
+      {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Word Unscrambler Hub","item":"https://wordunscramblerhub.com/"}]}
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to tool</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Word Unscrambler Hub home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="10"/><path d="M12 13h16M12 20h10M12 27h16"/></svg>
+      <span>Word <em>Unscrambler</em> Hub</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a aria-current="page" href="/">Unscrambler</a>
+      <a href="/connections-hints-today/">Today&rsquo;s Hints</a>
+      <a href="/connections-hints.html">Hint Archive</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">Free word game utility</p>
+        <h1>A word unscrambler built for your best play.</h1>
+        <p class="lede">Find every word your rack can make, narrow the list with exact filters, and compare scores without leaving the page.</p>
+      </div>
+      <div class="hero-stat" aria-label="Tool features">
+        <span>2–12</span>
+        <p>letter words, checked locally in your browser</p>
+      </div>
+    </section>
+
+    <div class="ad-reserve shell" data-ad-position="leaderboard" hidden aria-hidden="true"></div>
+
+    <section class="tool-layout shell" aria-labelledby="tool-title">
+      <div class="tool-card">
+        <div class="section-heading">
+          <p class="eyebrow">The solver</p>
+          <h2 id="tool-title">Unscramble your letters</h2>
+        </div>
+
+        <form id="unscrambler-form" novalidate>
+          <label class="field-label" for="rack-input">Your letters</label>
+          <div class="rack-row">
+            <input id="rack-input" name="rack" type="text" maxlength="15" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Try: o?ter" aria-describedby="rack-help">
+            <button class="primary-button" type="submit">Find words</button>
+          </div>
+          <p id="rack-help" class="field-help">Use <kbd>?</kbd> or <kbd>*</kbd> for a blank tile.</p>
+
+          <details class="filters">
+            <summary>Advanced filters</summary>
+            <div class="filter-grid">
+              <label>Starts with<input id="starts-with" type="text" maxlength="5" autocomplete="off"></label>
+              <label>Ends with<input id="ends-with" type="text" maxlength="5" autocomplete="off"></label>
+              <label>Contains<input id="contains" type="text" maxlength="5" autocomplete="off"></label>
+              <label>Word length
+                <select id="word-length">
+                  <option value="">Any length</option>
+                  <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+                  <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+                </select>
+              </label>
+            </div>
+          </details>
+        </form>
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+      </div>
+
+      <aside class="results-card" aria-live="polite" aria-busy="false">
+        <div class="results-header">
+          <div><p class="eyebrow">Results</p><h2>Playable words</h2></div>
+          <span id="result-count" class="count-pill">Ready</span>
+        </div>
+        <div id="results-empty" class="empty-state">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 18h36v32H14zM21 10h22v8H21zM22 28h20M22 36h14"/></svg>
+          <p>Enter a rack to build your word list.</p>
+        </div>
+        <div id="results-list" hidden></div>
+      </aside>
+    </section>
+
+    <section class="content-grid shell">
+      <article>
+        <p class="eyebrow">How it works</p>
+        <h2>Built for quick decisions, not endless scanning.</h2>
+        <p>The solver checks each dictionary entry against the exact letter counts in your rack. Blank tiles cover missing letters, while filters remove irrelevant matches before results appear.</p>
+        <p>Words are grouped from longest to shortest because longer plays are usually the hardest to spot. Each result includes Scrabble and Words With Friends values; scores from wildcard letters are correctly counted as zero.</p>
+      </article>
+      <ol class="steps">
+        <li><span>01</span><div><strong>Enter the rack</strong><p>Type up to 15 letters and add wildcards when needed.</p></div></li>
+        <li><span>02</span><div><strong>Set precise filters</strong><p>Limit results by pattern or exact word length.</p></div></li>
+        <li><span>03</span><div><strong>Compare the plays</strong><p>Review longer words and game scores first.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="faq shell" aria-labelledby="faq-title">
+      <p class="eyebrow">Straight answers</p>
+      <h2 id="faq-title">Word unscrambler questions</h2>
+      <details><summary>How do I unscramble letters?</summary><p>Enter the letters from your rack and select Find words. The solver compares your letters with its English word list, then groups matching words by length and displays their game scores.</p></details>
+      <details><summary>Can I use blank tiles or wildcards?</summary><p>Yes. Enter a question mark or asterisk for each blank tile. A wildcard can stand for any one letter and contributes zero points when the solver calculates a word score.</p></details>
+      <details><summary>Can I filter unscrambled words?</summary><p>Yes. You can require a starting letter, ending letter, contained letter sequence, or exact word length. Filters are applied before the final results are scored and sorted.</p></details>
+      <details><summary>Is this an official Scrabble or Words With Friends tool?</summary><p>No. This independent utility is not endorsed by or affiliated with the owners of those games. Dictionary acceptance can vary by game edition and region.</p></details>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <div><a class="brand footer-brand" href="/">Word <em>Unscrambler</em> Hub</a><p>Fast, independent helpers for word-game players.</p></div>
+    <nav aria-label="Footer navigation"><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>
+    <p class="legal-note">SCRABBLE is a trademark of its respective owner. Words With Friends is a trademark of Zynga. This site is not affiliated with either company.</p>
+  </footer>
+  <script src="dictionary.js" defer></script>
+  <script src="solver.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
